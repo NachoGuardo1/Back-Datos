@@ -5,7 +5,7 @@ const {
   usuarioPut,
   usuarioDelete,
 } = require("../controllers/usuarios");
-const router = Router;
+const router = Router();
 
 router.get("/", usuariosGet);
 router.post("/", usuarioPost);
