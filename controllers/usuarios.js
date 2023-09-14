@@ -2,11 +2,19 @@ const { response, request } = require("express");
 const bcrypt = require("bcryptjs");
 const Usuario = require("../models/usuario");
 
-const usuariosGet = (req = request, res = response) => {
-  const datos = req.query;
+const usuariosGet = async (req = request, res = response) => {
+  const { desde, limite } = req.query;
+  const query = { estado: true };
+
+  const [total, usuarios] = await Promise.all([
+    Usuario.countDocuments(query),
+    Usuario.find(query).skip(desde).limit(limite),
+  ]);
+
   res.json({
     mensaje: "Get usuarios",
-    datos,
+    total,
+    usuarios,
   });
 };
 
@@ -29,12 +37,31 @@ const usuarioPost = async (req = request, res = response) => {
   });
 };
 
-const usuarioPut = (req = request, res = response) => {
+const usuarioPut = async (req = request, res = response) => {
   res.json({ mensaje: "Put usuario" });
 };
 
-const usuarioDelete = (req = request, res = response) => {
-  res.json({ mensaje: "Delete usuario" });
+const usuarioDelete = async (req = request, res = response) => {
+  const { id } = req.params;
+  const usuarioAutenticado = req.usuario;
+  //cambiamos el estado
+  const usuario = await Usuario.findById(id);
+  if (!usuario.estado) {
+    return res.json({
+      msg: "El usuario ya se encuentra inactivo",
+    });
+  }
+
+  const usuarioInactivado = await Usuario.findByIdAndUpdate(
+    id,
+    { estado: false },
+    { new: true }
+  );
+  res.json({
+    mensaje: "Usuario modificado. Se cambio a estado INACTIVO",
+    usuarioInactivado,
+    usuarioAutenticado,
+  });
 };
 
 module.exports = { usuarioDelete, usuarioPost, usuarioPut, usuariosGet };

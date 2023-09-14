@@ -6,6 +6,13 @@ const {
   usuarioPut,
   usuarioDelete,
 } = require("../controllers/usuarios");
+const { validarCampos } = require("../middlewares/validar-campos");
+const {
+  correoExiste,
+  RolValido,
+  passRegex,
+  validarPass,
+} = require("../helpers/db-validator");
 const router = Router();
 
 router.get("/", usuariosGet);
@@ -13,13 +20,12 @@ router.post(
   "/",
   [
     check("nombre", "el nombre es obligatorio").notEmpty(),
-    check("correo", "No es un correo valido").isEmail(),
-    check(
-      "password",
-      "La contraseña debe contester un minimo de 6 caracteres"
-    ).isLength({ min: 6 }),
-    check("rol", "El rol no es valido").isIn(["USER", "ADMIN"]),
+    check("correo").custom(correoExiste),
+    check("password").custom(validarPass),
+    check("rol").custom(RolValido),
+    validarCampos,
   ],
+
   usuarioPost
 );
 router.put("/:id", usuarioPut);

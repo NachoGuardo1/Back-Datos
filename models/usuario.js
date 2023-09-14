@@ -12,4 +12,11 @@ const UsuarioSchema = Schema({
   estado: { type: Boolean, default: true },
 });
 
+//quitar datos extras
+UsuarioSchema.methods.toJSON = function () {
+  //desestructuramos los datos
+  const { __v, contrasena, ...usuario } = this.toObject();
+  return usuario;
+};
+
 module.exports = model("Usuario", UsuarioSchema);
