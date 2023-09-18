@@ -10,8 +10,8 @@ const { validarCampos } = require("../middlewares/validar-campos");
 const {
   correoExiste,
   RolValido,
-  passRegex,
   validarPass,
+  usuarioExiste,
 } = require("../helpers/db-validator");
 const router = Router();
 
@@ -28,7 +28,16 @@ router.post(
 
   usuarioPost
 );
-router.put("/:id", usuarioPut);
+router.put(
+  "/:id",
+  [
+    check("id", "No es un id valido").isMongoId(),
+    check("id").custom(usuarioExiste),
+    check("rol").custom(RolValido),
+    validarCampos,
+  ],
+  usuarioPut
+);
 router.delete("/:id", usuarioDelete);
 
 module.exports = router;

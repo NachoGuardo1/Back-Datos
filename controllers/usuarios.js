@@ -38,14 +38,25 @@ const usuarioPost = async (req = request, res = response) => {
 };
 
 const usuarioPut = async (req = request, res = response) => {
-  res.json({ mensaje: "Put usuario" });
+  const { id } = req.params;
+
+  //obtener datos para actualizar
+  const { password, correo, ...resto } = req.body;
+  //cifrar password
+  const salt = bcrypt.genSaltSync(10);
+  resto.password = bcrypt.hashSync(password, salt);
+
+  //buscar y actualizar usuario
+  const usuario = await Usuario.findByIdAndUpdate(id, resto, { new: true });
+
+  res.json({ mensaje: "Usuario actualizado", usuario });
 };
 
 const usuarioDelete = async (req = request, res = response) => {
-  const { id } = req.params;
+  const { _id } = req.params;
   const usuarioAutenticado = req.usuario;
   //cambiamos el estado
-  const usuario = await Usuario.findById(id);
+  const usuario = await Usuario.findById(_id);
   if (!usuario.estado) {
     return res.json({
       msg: "El usuario ya se encuentra inactivo",

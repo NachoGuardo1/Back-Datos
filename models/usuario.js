@@ -15,7 +15,8 @@ const UsuarioSchema = Schema({
 //quitar datos extras
 UsuarioSchema.methods.toJSON = function () {
   //desestructuramos los datos
-  const { __v, contrasena, ...usuario } = this.toObject();
+  const { __v, password, _id, ...usuario } = this.toObject();
+  usuario.uid = _id;
   return usuario;
 };
 

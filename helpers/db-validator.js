@@ -26,4 +26,13 @@ const validarPass = async (password) => {
   }
 };
 
-module.exports = { correoExiste, RolValido, validarPass };
+//validacion usuario
+const usuarioExiste = async (id) => {
+  const existeUsuario = await Usuario.findById(id);
+
+  if (!usuario) {
+    throw new Error(`El id ${id} no corresponde a ningun usuario`);
+  }
+};
+
+module.exports = { correoExiste, RolValido, validarPass, usuarioExiste };
