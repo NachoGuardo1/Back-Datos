@@ -53,10 +53,10 @@ const usuarioPut = async (req = request, res = response) => {
 };
 
 const usuarioDelete = async (req = request, res = response) => {
-  const { _id } = req.params;
+  const { id } = req.params;
   const usuarioAutenticado = req.usuario;
   //cambiamos el estado
-  const usuario = await Usuario.findById(_id);
+  const usuario = await Usuario.findById(id);
   if (!usuario.estado) {
     return res.json({
       msg: "El usuario ya se encuentra inactivo",
