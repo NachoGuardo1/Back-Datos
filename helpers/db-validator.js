@@ -30,7 +30,7 @@ const validarPass = async (password) => {
 const usuarioExiste = async (id) => {
   const existeUsuario = await Usuario.findById(id);
 
-  if (!usuario) {
+  if (!existeUsuario) {
     throw new Error(`El id ${id} no corresponde a ningun usuario`);
   }
 };
