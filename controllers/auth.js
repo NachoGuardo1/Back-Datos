@@ -33,6 +33,7 @@ const login = async (req = request, res = response) => {
 
     res.json({
       msg: "login OK",
+      usuario,
       token,
     });
   } catch (error) {
