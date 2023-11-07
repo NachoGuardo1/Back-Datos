@@ -1,5 +1,6 @@
 const Rol = require("../models/rol");
 const Usuario = require("../models/usuario");
+const Tarea = require("../models/tarea");
 
 //validacion rol
 const RolValido = async (rol) => {
@@ -35,4 +36,26 @@ const usuarioExiste = async (id) => {
   }
 };
 
-module.exports = { correoExiste, RolValido, validarPass, usuarioExiste };
+const nombreTareaExiste = async (nombre) => {
+  const existeTarea = await Tarea.findOne({ nombre });
+  if (existeTarea) {
+    throw new Error(
+      `El nombre de la tarea ${nombre} ya se encuentra registrado.`
+    );
+  }
+};
+const tareaExiste = async (id) => {
+  const existeTarea = await Tarea.findById(id);
+  if (!existeTarea) {
+    throw new Error(`El id ${id} no corresponde a ninguna tarea registrado.}`);
+  }
+};
+
+module.exports = {
+  correoExiste,
+  RolValido,
+  validarPass,
+  usuarioExiste,
+  nombreTareaExiste,
+  tareaExiste,
+};
