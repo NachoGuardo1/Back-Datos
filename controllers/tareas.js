@@ -76,4 +76,37 @@ const tareaDelete = async (req = request, res = response) => {
   });
 };
 
-module.exports = { tareasGet, tareasPost, tareaDelete, tareaPut };
+const tareasCompletadasGet = async (req, res) => {
+  try {
+    const tareasActivas = await Tarea.find({ estado: true });
+    const tareasCompletadas = tareasActivas.filter(
+      (tarea) => tarea.completada === true
+    );
+
+    res.json(tareasCompletadas);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener tareas completadas" });
+  }
+};
+
+const tareasPendientesGet = async (req = request, res = response) => {
+  try {
+    const tareasActivas = await Tarea.find({ estado: true });
+    const tareasPendientes = tareasActivas.filter(
+      (tarea) => tarea.completada === false
+    );
+
+    res.json(tareasPendientes);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener tareas pendientes" });
+  }
+};
+
+module.exports = {
+  tareasGet,
+  tareasPost,
+  tareaDelete,
+  tareaPut,
+  tareasCompletadasGet,
+  tareasPendientesGet,
+};

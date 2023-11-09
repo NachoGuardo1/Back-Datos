@@ -7,10 +7,16 @@ const {
   tareaPut,
   tareasGet,
   tareasPost,
+  tareasCompletadasGet,
+  tareasPendientesGet,
 } = require("../controllers/tareas");
 const { nombreTareaExiste, tareaExiste } = require("../helpers/db-validator");
 
 router.get("/", tareasGet);
+
+router.get("/completadas", tareasCompletadasGet);
+
+router.get("/pendientes", tareasPendientesGet);
 
 router.post(
   "/",
