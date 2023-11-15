@@ -11,16 +11,18 @@ const {
   tareasPendientesGet,
 } = require("../controllers/tareas");
 const { nombreTareaExiste, tareaExiste } = require("../helpers/db-validator");
+const { validarJWT } = require("../helpers/validar-jwt");
 
-router.get("/", tareasGet);
+router.get("/", validarJWT, tareasGet);
 
-router.get("/completadas", tareasCompletadasGet);
+router.get("/completadas", validarJWT, tareasCompletadasGet);
 
-router.get("/pendientes", tareasPendientesGet);
+router.get("/pendientes", validarJWT, tareasPendientesGet);
 
 router.post(
   "/",
   [
+    validarJWT,
     check("nombre", "El nombre es obligatorio.").notEmpty(),
     check("nombre").custom(nombreTareaExiste),
     check("descripcion", "La descripcion es obligatoria.").notEmpty(),

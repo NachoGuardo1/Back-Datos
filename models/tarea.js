@@ -24,6 +24,10 @@ const TareasSchema = Schema({
     type: Boolean,
     default: false,
   },
+  usuario: {
+    type: String,
+    required: [true, "El usuario es requerido"],
+  },
 });
 
 module.exports = model("Tareas", TareasSchema);

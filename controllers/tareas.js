@@ -3,27 +3,35 @@ const Tarea = require("../models/tarea");
 
 const tareasGet = async (req = request, res = response) => {
   const { desde = 0, limite } = req.query;
-  const query = { estado: true };
+  const usuario = req.usuario._id;
+  const query = { estado: true, usuario: usuario };
 
-  const [total, tareas] = await Promise.all([
-    Tarea.countDocuments(query),
-    Tarea.find(query).skip(desde).limit(limite),
-  ]);
+  try {
+    const [total, tareas] = await Promise.all([
+      Tarea.countDocuments(query),
+      Tarea.find(query).skip(desde).limit(limite),
+    ]);
 
-  res.json({
-    total,
-    tareas,
-  });
+    res.json({
+      total,
+      tareas,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500);
+  }
 };
 
 const tareasPost = async (req = request, res = response) => {
   const nombre = req.body.nombre;
   const descripcion = req.body.descripcion;
+  const usuario = req.usuario._id;
 
   //generar la data que vamos a guardar
   const data = {
     nombre,
     descripcion,
+    usuario,
   };
 
   const tarea = new Tarea(data);
@@ -33,6 +41,7 @@ const tareasPost = async (req = request, res = response) => {
 
   res.json({
     tarea,
+    usuario,
     messaje: "Tarea creado exitosamente",
   });
 };
@@ -77,8 +86,9 @@ const tareaDelete = async (req = request, res = response) => {
 };
 
 const tareasCompletadasGet = async (req, res) => {
+  const usuario = req.usuario._id;
   try {
-    const tareasActivas = await Tarea.find({ estado: true });
+    const tareasActivas = await Tarea.find({ estado: true, usuario: usuario });
     const tareasCompletadas = tareasActivas.filter(
       (tarea) => tarea.completada === true
     );
@@ -90,8 +100,9 @@ const tareasCompletadasGet = async (req, res) => {
 };
 
 const tareasPendientesGet = async (req = request, res = response) => {
+  const usuario = req.usuario._id;
   try {
-    const tareasActivas = await Tarea.find({ estado: true });
+    const tareasActivas = await Tarea.find({ estado: true, usuario: usuario });
     const tareasPendientes = tareasActivas.filter(
       (tarea) => tarea.completada === false
     );
