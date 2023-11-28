@@ -22,6 +22,7 @@ router.post(
   "/",
   [
     check("nombre", "el nombre es obligatorio").notEmpty(),
+    check("apellido", "el apellido es obligatorio").notEmpty(),
     check("correo").custom(correoExiste),
     check("password").custom(validarPass),
     check("rol").custom(RolValido),
