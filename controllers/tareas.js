@@ -17,7 +17,6 @@ const tareasGet = async (req = request, res = response) => {
       tareas,
     });
   } catch (error) {
-    console.error(error);
     res.status(500);
   }
 };

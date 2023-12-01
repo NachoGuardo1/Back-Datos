@@ -37,7 +37,6 @@ const login = async (req = request, res = response) => {
       token,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       msg: "Hable con el ADM",
     });

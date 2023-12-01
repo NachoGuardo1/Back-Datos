@@ -12,7 +12,6 @@ const generarJWT = (uid) => {
       { expiresIn: "4h" },
       (error, token) => {
         if (error) {
-          console.log(error);
           reject("No se puede generar el token");
         } else {
           resolve(token);
