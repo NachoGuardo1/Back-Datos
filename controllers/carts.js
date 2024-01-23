@@ -2,7 +2,7 @@ const { response, request } = require("express");
 const Cart = require("../models/cart");
 
 const cartGetById = async (req = request, res = response) => {
-  const { id } = req.params.id;
+  const { id } = req.params._id;
   try {
     const cart = await Cart.findOne(id);
     res.json(cart);
@@ -12,7 +12,7 @@ const cartGetById = async (req = request, res = response) => {
 };
 
 const deleteCart = async (req, res) => {
-  const { id } = req.params.id;
+  const { id } = req.params._id;
   try {
     const cart = await Cart.findOne(id);
     res.json(cart);
@@ -40,7 +40,7 @@ const addCart = async (req, res) => {
 };
 
 const cartPut = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params._id;
   const { userId, products, ...rest } = req.body;
   rest.userId = userId;
   rest.products = products;
