@@ -9,12 +9,11 @@ class Server {
     this.authPath = "/api/auth";
     this.usuariosPath = "/api/usuarios";
     this.tareasPath = "/api/tareas";
+    this.productsPath = "/api/products";
+    this.cartsPath = "/api/carts";
 
-    //conectar con BD
     this.conectarDB();
-    //midlewares
     this.middlewares();
-    //funcion para rutas
     this.routes();
   }
 
@@ -36,6 +35,8 @@ class Server {
     this.app.use(this.authPath, require("../routes/auth"));
     this.app.use(this.usuariosPath, require("../routes/usuarios"));
     this.app.use(this.tareasPath, require("../routes/tareas"));
+    this.app.use(this.productsPath, require("../routes/productos"));
+    this.app.use(this.cartsPath, require("../routes/carts"));
   }
 
   listen() {
