@@ -28,7 +28,7 @@ const getProduct = async (req, res) => {
   const id = req.params._id;
 
   try {
-    const product = await Product.findOne( id );
+    const product = await Product.findOne({_id: id});
     res.json(product);
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
