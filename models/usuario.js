@@ -9,7 +9,7 @@ const UsuarioSchema = Schema({
     unique: true,
   },
   password: { type: String, required: [true, "la contraseña es obligatoria"] },
-  rol: { type: String, required: true },
+  rol: { type: String, required: true, enum: ["USER", "ADMIN"] },
   estado: { type: Boolean, default: true },
 });
 

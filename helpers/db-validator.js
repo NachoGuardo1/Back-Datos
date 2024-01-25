@@ -1,15 +1,5 @@
-const Rol = require("../models/rol");
 const Usuario = require("../models/usuario");
 const Tarea = require("../models/tarea");
-
-//validacion rol
-const RolValido = async (rol) => {
-  const existeRol = await Rol.findOne({ rol });
-
-  if (!existeRol) {
-    throw new Error(`El rol ${rol} no existe en la BD`);
-  }
-};
 
 //validacion correo
 const correoExiste = async (correo) => {
@@ -53,7 +43,6 @@ const tareaExiste = async (id) => {
 
 module.exports = {
   correoExiste,
-  RolValido,
   validarPass,
   usuarioExiste,
   nombreTareaExiste,
