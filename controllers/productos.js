@@ -2,15 +2,19 @@ const { response, request } = require("express");
 const Product = require("../models/producto");
 
 const productsGet = async (req = request, res = response) => {
-  const { skip = 0, limit, searchTerm, sortBy } = req.query;
+  const { skip = 0, limit, searchTerm, sortBy, sort } = req.query;
   const query = { state: true };
   const sortOption = {};
 
   if (searchTerm) {
     query.title = { $regex: searchTerm, $options: "i" };
   }
-  if (sortBy) {
-    sortOption[sortBy] = -1;
+  if (sort) {
+    if (sort === "asc") {
+      sortOption[sortBy] = 1;
+    } else if (sort === "desc") {
+      sortOption[sortBy] = -1;
+    }
   }
   try {
     const [total, products] = await Promise.all([
@@ -118,10 +122,22 @@ const productCategoriesGet = async (req, res) => {
 };
 
 const getProductsInCategory = async (req, res) => {
-  const { skip = 0, limit } = req.query;
+  const { skip = 0, limit, sortBy, sort } = req.query;
   const category = req.params.category;
+  const sortOption = {};
+
+  if (sort) {
+    if (sort === "asc") {
+      sortOption[sortBy] = 1;
+    } else if (sort === "desc") {
+      sortOption[sortBy] = -1;
+    }
+  }
   try {
-    const products = await Product.find({ category }).skip(skip).limit(limit);
+    const products = await Product.find({ category })
+      .skip(skip)
+      .limit(limit)
+      .sort(sortOption);
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
