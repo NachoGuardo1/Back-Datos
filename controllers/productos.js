@@ -125,7 +125,7 @@ const getProductsInCategory = async (req, res) => {
   const { skip = 0, limit, sortBy, sort } = req.query;
   const category = req.params.category;
   const sortOption = {};
-  const query = { category: category };
+  const query = { category: category, state: true };
 
   if (sort) {
     if (sort === "asc") {
@@ -138,7 +138,7 @@ const getProductsInCategory = async (req, res) => {
   try {
     const [total, products] = await Promise.all([
       Product.countDocuments(query),
-      Product.find({ category }).skip(skip).limit(limit).sort(sortOption),
+      Product.find(query).skip(skip).limit(limit).sort(sortOption),
     ]);
 
     res.json({
