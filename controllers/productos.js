@@ -125,6 +125,7 @@ const getProductsInCategory = async (req, res) => {
   const { skip = 0, limit, sortBy, sort } = req.query;
   const category = req.params.category;
   const sortOption = {};
+  const query = { category: category };
 
   if (sort) {
     if (sort === "asc") {
@@ -133,12 +134,17 @@ const getProductsInCategory = async (req, res) => {
       sortOption[sortBy] = -1;
     }
   }
+
   try {
-    const products = await Product.find({ category })
-      .skip(skip)
-      .limit(limit)
-      .sort(sortOption);
-    res.json(products);
+    const [total, products] = await Promise.all([
+      Product.countDocuments(query),
+      Product.find({ category }).skip(skip).limit(limit).sort(sortOption),
+    ]);
+
+    res.json({
+      total,
+      products,
+    });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
